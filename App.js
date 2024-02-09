@@ -1,20 +1,22 @@
+import { useFonts } from "expo-font";
 import React from "react";
-import { SafeAreaView, StyleSheet } from "react-native";
+import { Text, View } from "react-native";
 import BookList from "./Pages/home";
 
-const App = () => {
+export default function App() {
+  const [loaded] = useFonts({
+    "Poppins-Regular": require("./assets/fonts/Poppins-Regular.ttf"),
+    "Poppins-Bold": require("./assets/fonts/Poppins-Bold.ttf"),
+    "Poppins-Medium": require("./assets/fonts/Poppins-Medium.ttf"),
+  });
+
+  if (!loaded) {
+    return null;
+  }
+
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={{ flex: 1 }}>
       <BookList />
-    </SafeAreaView>
+    </View>
   );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-  },
-});
-
-export default App;
+}
