@@ -8,6 +8,7 @@ import {
   StyleSheet,
 } from "react-native";
 import Banner from "../components/banner";
+import SearchPage from "./SearchPage";
 
 const BookList = () => {
   const [books, setBooks] = useState([]);
@@ -62,7 +63,12 @@ const BookList = () => {
             },
           ]}
         >
-          <Text style={{ color: book.status === "Read" ? "white" : "black" }}>
+          <Text
+            style={[
+              styles.statusText,
+              { color: book.status === "Read" ? "white" : "red" },
+            ]}
+          >
             {book.status}
           </Text>
         </TouchableOpacity>
@@ -73,6 +79,7 @@ const BookList = () => {
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContent}>
       <Banner />
+      <SearchPage />
       {books.map((book, index) => renderBookItem(book, index))}
     </ScrollView>
   );
@@ -85,6 +92,7 @@ const styles = StyleSheet.create({
   bookItem: {
     flexDirection: "row",
     marginBottom: 20,
+    alignItems: "center",
   },
   coverImage: {
     width: 100,
@@ -93,28 +101,34 @@ const styles = StyleSheet.create({
   },
   bookDetails: {
     flex: 1,
-    justifyContent: "center",
   },
   title: {
-    fontSize: 16,
-    fontWeight: "bold",
+    fontSize: 14,
+    fontFamily: "Poppins-Bold",
     marginBottom: 5,
   },
   author: {
-    fontSize: 14,
+    fontSize: 12,
+    fontFamily: "Poppins-Medium",
+    color: "gray",
     marginBottom: 5,
   },
   year: {
-    fontSize: 14,
+    fontSize: 12,
+    fontFamily: "Poppins-Regular",
+    color: "gray",
     marginBottom: 5,
   },
   statusButton: {
     borderWidth: 1,
-    padding: 10,
-    borderRadius: 5,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 20,
     justifyContent: "center",
     alignItems: "center",
-    width: 70,
+  },
+  statusText: {
+    fontFamily: "Poppins-Medium",
   },
 });
 

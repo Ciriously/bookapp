@@ -1,7 +1,12 @@
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
 import { useFonts } from "expo-font";
 import React from "react";
-import { Text, View } from "react-native";
+import { View } from "react-native";
 import BookList from "./Pages/home";
+import SearchPage from "./Pages/SearchPage";
+
+const Stack = createStackNavigator();
 
 export default function App() {
   const [loaded] = useFonts({
@@ -15,8 +20,15 @@ export default function App() {
   }
 
   return (
-    <View style={{ flex: 1 }}>
-      <BookList />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Home">
+        <Stack.Screen
+          name="Home"
+          component={BookList}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen name="Search" component={SearchPage} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
