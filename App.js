@@ -2,7 +2,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useFonts } from "expo-font";
 import React from "react";
-import { View } from "react-native";
+
 import BookList from "./Pages/home";
 import SearchPage from "./Pages/SearchPage";
 

@@ -88,6 +88,7 @@ const BookList = () => {
 const styles = StyleSheet.create({
   scrollViewContent: {
     padding: 20,
+    backgroundColor: "white",
   },
   bookItem: {
     flexDirection: "row",

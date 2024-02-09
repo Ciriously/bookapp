@@ -12,6 +12,7 @@ import {
 const SearchPage = () => {
   const [books, setBooks] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [displayCount, setDisplayCount] = useState(6);
 
   useEffect(() => {
     if (searchTerm) {
@@ -20,7 +21,7 @@ const SearchPage = () => {
         .then((data) => {
           if (Array.isArray(data.docs)) {
             const booksWithStatus = data.docs
-              .slice(0, 20)
+              .slice(0, displayCount)
               .map((book) => ({ ...book, status: "Unread" }));
             setBooks(booksWithStatus);
           } else {
@@ -31,7 +32,7 @@ const SearchPage = () => {
           console.error("Error fetching books:", error);
         });
     }
-  }, [searchTerm]);
+  }, [searchTerm, displayCount]);
 
   const toggleStatus = (index) => {
     setBooks((prevBooks) => {
@@ -94,6 +95,7 @@ const SearchPage = () => {
 const styles = StyleSheet.create({
   scrollViewContent: {
     padding: 20,
+    backgroundColor: "white",
   },
   bookItem: {
     flexDirection: "row",
@@ -135,8 +137,11 @@ const styles = StyleSheet.create({
   },
   searchBar: {
     height: 40,
-    borderColor: "gray",
+    borderColor: "#fff",
+    backgroundColor: "#f2f2f2",
     borderWidth: 1,
+    borderRadius: 10,
+    fontFamily: "Poppins-Medium",
     marginBottom: 10,
     paddingLeft: 10,
   },
