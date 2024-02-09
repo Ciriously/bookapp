@@ -184,10 +184,11 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   searchResultsContainer: {
-    backgroundColor: "#e0e0e0",
+    backgroundColor: "#f2f2f2",
     padding: 10,
     borderRadius: 5,
     marginBottom: 20,
+    width: "100%",
   },
   searchResultsTitle: {
     fontSize: 18,
