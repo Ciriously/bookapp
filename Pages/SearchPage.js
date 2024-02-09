@@ -7,18 +7,23 @@ import {
   ScrollView,
   StyleSheet,
   TextInput,
+  ActivityIndicator,
 } from "react-native";
 
 const SearchPage = () => {
   const [books, setBooks] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [displayCount, setDisplayCount] = useState(6);
+  const [fetchError, setFetchError] = useState(false);
+  const [fetching, setFetching] = useState(false);
 
   useEffect(() => {
     if (searchTerm) {
+      setFetching(true); // indicate fetching is in progress
       fetch(`https://openlibrary.org/search.json?title=${searchTerm}`)
         .then((response) => response.json())
         .then((data) => {
+          setFetching(false); // indicate fetching is completed
           if (Array.isArray(data.docs)) {
             const booksWithStatus = data.docs
               .slice(0, displayCount)
@@ -26,10 +31,13 @@ const SearchPage = () => {
             setBooks(booksWithStatus);
           } else {
             console.error("Invalid data format:", data);
+            setFetchError(true); // set error state if data format is invalid
           }
         })
         .catch((error) => {
           console.error("Error fetching books:", error);
+          setFetchError(true); // set error state if fetching failed
+          setFetching(false); // indicate fetching is completed (even if it failed)
         });
     }
   }, [searchTerm, displayCount]);
@@ -80,14 +88,37 @@ const SearchPage = () => {
     );
   };
 
+  const resetSearch = () => {
+    setSearchTerm("");
+    setBooks([]);
+    setFetchError(false);
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContent}>
+      {fetching && <ActivityIndicator size="large" color="#0000ff" />}
       <TextInput
         style={styles.searchBar}
         placeholder="Search for books..."
         onChangeText={setSearchTerm}
+        value={searchTerm}
       />
-      {books.map((book, index) => renderBookItem(book, index))}
+      {searchTerm !== "" && (
+        <TouchableOpacity style={styles.resetButton} onPress={resetSearch}>
+          <Text style={styles.resetButtonText}>Reset Search</Text>
+        </TouchableOpacity>
+      )}
+      {fetchError && (
+        <Text style={styles.errorText}>
+          Error fetching books. Please try again.
+        </Text>
+      )}
+      {books.length > 0 && (
+        <View style={styles.searchResultsContainer}>
+          <Text style={styles.searchResultsTitle}>Search Results</Text>
+          {books.map((book, index) => renderBookItem(book, index))}
+        </View>
+      )}
     </ScrollView>
   );
 };
@@ -146,6 +177,32 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
   },
   statusText: {
+    fontFamily: "Poppins-Medium",
+  },
+  errorText: {
+    color: "red",
+    marginBottom: 10,
+  },
+  searchResultsContainer: {
+    backgroundColor: "#e0e0e0",
+    padding: 10,
+    borderRadius: 5,
+    marginBottom: 20,
+  },
+  searchResultsTitle: {
+    fontSize: 18,
+    fontFamily: "Poppins-Bold",
+    marginBottom: 10,
+  },
+  resetButton: {
+    backgroundColor: "red",
+    padding: 10,
+    borderRadius: 5,
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  resetButtonText: {
+    color: "white",
     fontFamily: "Poppins-Medium",
   },
 });
